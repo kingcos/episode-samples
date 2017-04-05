@@ -16,12 +16,12 @@ class AboutUsViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        let htmlFile = NSBundle.mainBundle().pathForResource("aboutus", ofType: "html")
+        let htmlFile = Bundle.main.path(forResource: "aboutus", ofType: "html")
         
         if (htmlFile != nil) {
-            if let htmlData = NSData(contentsOfFile: htmlFile!) {
-                let mainBundleUrl = NSURL(fileURLWithPath: NSBundle.mainBundle().bundlePath)
-                self.aboutUs.loadData(htmlData, MIMEType: "text/html", textEncodingName: "UTF-8", baseURL: mainBundleUrl)
+            if let htmlData = try? Data(contentsOf: URL(fileURLWithPath: htmlFile!)) {
+                let mainBundleUrl = URL(fileURLWithPath: Bundle.main.bundlePath)
+                self.aboutUs.load(htmlData, mimeType: "text/html", textEncodingName: "UTF-8", baseURL: mainBundleUrl)
             }
         }
         
@@ -33,8 +33,8 @@ class AboutUsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func close(sender: UIButton) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func close(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
     }
 
     /*

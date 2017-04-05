@@ -12,14 +12,14 @@ class EpisodeListViewController: UITableViewController {
     var episodeListItems: [EpisodeListItem] = []
     
     // Helpers
-    func documentsDirectory() -> NSURL {
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+    func documentsDirectory() -> URL {
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         
         return urls[0]
     }
     
-    func fileUrl(fileName: String) -> NSURL {
-        let documentUrl = self.documentsDirectory().URLByAppendingPathComponent(fileName)
+    func fileUrl(_ fileName: String) -> URL {
+        let documentUrl = self.documentsDirectory().appendingPathComponent(fileName)
         
         return documentUrl
     }
@@ -38,30 +38,30 @@ class EpisodeListViewController: UITableViewController {
         // 1. Create a NSMutableData object
         let data = NSMutableData()
         // 2. Create a NSKeyedArchiver for data
-        let archiver = NSKeyedArchiver(forWritingWithMutableData: data)
+        let archiver = NSKeyedArchiver(forWritingWith: data)
         // 3. Encode EpisodeListItems array
-        archiver.encodeObject(episodeListItems, forKey: "EpisodeListItems")
+        archiver.encode(episodeListItems, forKey: "EpisodeListItems")
         archiver.finishEncoding()
         // 4. Save data to plist file
         let plistUrl = fileUrl("EpisodeList.plist")
-        data.writeToURL(plistUrl, atomically: true)
+        data.write(to: plistUrl, atomically: true)
     }
     
     func loadEpisodeListItems() {
         let plistUrl = fileUrl("EpisodeList.plist")
         
-        let fileExists = plistUrl.checkResourceIsReachableAndReturnError(nil)
+        let fileExists = (plistUrl as NSURL).checkResourceIsReachableAndReturnError(nil)
         
         if fileExists {
             // 1. Create a NSData by plistUrl
-            let data = NSData(contentsOfURL: plistUrl)
+            let data = try? Data(contentsOf: plistUrl)
             
             if data != nil {
                 // 2. Create a NSKeyedUnarchiver
-                let unarchiver = NSKeyedUnarchiver(forReadingWithData: data!)
+                let unarchiver = NSKeyedUnarchiver(forReadingWith: data!)
                 
                 // 3. Decode the object with key EpisodeListItems
-                episodeListItems = unarchiver.decodeObjectForKey("EpisodeListItems") as! [EpisodeListItem]
+                episodeListItems = unarchiver.decodeObject(forKey: "EpisodeListItems") as! [EpisodeListItem]
                 unarchiver.finishDecoding()
             }
         }
@@ -72,28 +72,28 @@ class EpisodeListViewController: UITableViewController {
     }
     
     // UITableView data source
-    override func tableView(tableView: UITableView,
+    override func tableView(_ tableView: UITableView,
                             numberOfRowsInSection section: Int) -> Int {
         return 10
     }
     
-    override func tableView(tableView: UITableView,
-                            cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(
-            "EpisodeItem", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView,
+                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "EpisodeItem", for: indexPath)
         
         let label = cell.viewWithTag(1024) as! UILabel
         
         let title = self.episodeListItems[indexPath.row].title
         label.text = title
         
-        cell.accessoryType = self.episodeListItems[indexPath.row].finished ? .Checkmark : .None
+        cell.accessoryType = self.episodeListItems[indexPath.row].finished ? .checkmark : .none
         return cell
     }
     
     // UITableView delegate
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     

@@ -10,14 +10,14 @@ import UIKit
 import Alamofire
 
 enum DownloadStatus {
-    case NotStarted
-    case Downloading
-    case Suspended
-    case Cancelled
+    case notStarted
+    case downloading
+    case suspended
+    case cancelled
 }
 
 class ViewController: UIViewController {
-    var currStatus = DownloadStatus.NotStarted
+    var currStatus = DownloadStatus.notStarted
     
     @IBOutlet weak var downloadUrl: UITextField!
     @IBOutlet weak var downloadProgress: UIProgressView!
@@ -28,9 +28,9 @@ class ViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        if !self.episodesDirUrl.checkResourceIsReachableAndReturnError(nil) {
-            try! NSFileManager.defaultManager()
-                .createDirectoryAtURL(self.episodesDirUrl,
+        if !(self.episodesDirUrl as NSURL).checkResourceIsReachableAndReturnError(nil) {
+            try! FileManager.default
+                .createDirectory(at: self.episodesDirUrl,
                                 withIntermediateDirectories: true,
                                 attributes: nil)
         }
@@ -48,84 +48,84 @@ class ViewController: UIViewController {
 }
 
 extension ViewController {
-    var documentsDirUrl: NSURL {
-        let fm = NSFileManager.defaultManager()
-        let url = fm.URLsForDirectory(.DocumentDirectory,
-                                    inDomains: .UserDomainMask)[0]
+    var documentsDirUrl: URL {
+        let fm = FileManager.default
+        let url = fm.urls(for: .documentDirectory,
+                                    in: .userDomainMask)[0]
         
         return url
     }
     
-    var episodesDirUrl: NSURL {
+    var episodesDirUrl: URL {
         let url = self.documentsDirUrl
-                    .URLByAppendingPathComponent("episodes", isDirectory: true)
+                    .appendingPathComponent("episodes", isDirectory: true)
         
         return url
     }
 }
 
 extension ViewController {
-    @IBAction func valueChanged(sender: UITextField) {
+    @IBAction func valueChanged(_ sender: UITextField) {
         print("text field: \(sender.text)")
         
         if sender.text != "" {
-            self.beginBtn.enabled = true
+            self.beginBtn.isEnabled = true
         }
         else {
-            self.beginBtn.enabled = false
+            self.beginBtn.isEnabled = false
         }
     }
     
     // Button actions
-    @IBAction func beginDownload(sender: AnyObject) {
+    @IBAction func beginDownload(_ sender: AnyObject) {
         print("Begin downloading...")
         
         // TODO: Add begin downloading code here
         
         
-        self.suspendOrResumeBtn.enabled = true;
-        self.cancelBtn.enabled = true;
-        self.currStatus = .Downloading
+        self.suspendOrResumeBtn.isEnabled = true;
+        self.cancelBtn.isEnabled = true;
+        self.currStatus = .downloading
     }
     
-    @IBAction func suspendOrResumeDownload(sender: AnyObject) {
+    @IBAction func suspendOrResumeDownload(_ sender: AnyObject) {
         var btnTitle: String?
         
         switch self.currStatus {
-        case .Downloading:
+        case .downloading:
             print("Suspend downloading...")
             
             // TODO: Add suspending code here
             
             
-            self.currStatus = .Suspended
+            self.currStatus = .suspended
             btnTitle = "Resume"
             
-        case .Suspended:
+        case .suspended:
             print("Resume downloading...")
             
             // TODO: Add resuming code here
-            self.currStatus = .Downloading
+            self.currStatus = .downloading
             btnTitle = "Suspend"
             
-        case .NotStarted, .Cancelled:
+        case .notStarted, .cancelled:
             break
         }
         
-        self.suspendOrResumeBtn.setTitle(btnTitle, forState: UIControlState.Normal)
+        self.suspendOrResumeBtn.setTitle(btnTitle, for: UIControlState())
     }
     
-    @IBAction func cancelDownload(sender: AnyObject) {
+    @IBAction func cancelDownload(_ sender: AnyObject) {
         print("Cancel downloading...")
         
         switch self.currStatus {
-        case .Downloading, .Suspended:
+        case .downloading, .suspended:
             // TODO: Add cancel code here
             
-            self.currStatus = .Cancelled
-            self.cancelBtn.enabled = false
-            self.suspendOrResumeBtn.enabled = false
-            self.suspendOrResumeBtn.setTitle("Suspend", forState: UIControlState.Normal)
+            self.currStatus = .cancelled
+            self.cancelBtn.isEnabled = false
+            self.suspendOrResumeBtn.isEnabled = false
+            self.suspendOrResumeBtn.setTitle("Suspend", for: UIControlState())
         default:
             break
         }

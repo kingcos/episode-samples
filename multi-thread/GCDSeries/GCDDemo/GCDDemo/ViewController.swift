@@ -32,45 +32,45 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func clearDownload(sender: UIButton) {
+    @IBAction func clearDownload(_ sender: UIButton) {
         self.image1.image = nil
         self.image2.image = nil
         self.image3.image = nil
         self.image4.image = nil
         
-        NSURLCache.sharedURLCache().removeAllCachedResponses()
+        URLCache.shared.removeAllCachedResponses()
     }
 
-    @IBAction func downloadImages(sender: UIButton) {
+    @IBAction func downloadImages(_ sender: UIButton) {
         // Create serial queue
-        let serialQueue1 = dispatch_queue_create("com.boxueio.images", DISPATCH_QUEUE_SERIAL)
+        let serialQueue1 = DispatchQueue(label: "com.boxueio.images", attributes: [])
         // Add task
-        dispatch_async(serialQueue1, {
+        serialQueue1.async(execute: {
             let img1 = Downloader.downloadImageWithURL(self.imageUrls[0])
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.image1.image = img1
                 self.image1.clipsToBounds = true
             })
             
             
             let img3 = Downloader.downloadImageWithURL(self.imageUrls[2])
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.image3.image = img3
                 self.image3.clipsToBounds = true
             })
             
         })
-        let serialQueue2 = dispatch_queue_create("com.boxueio.images1", DISPATCH_QUEUE_SERIAL)
+        let serialQueue2 = DispatchQueue(label: "com.boxueio.images1", attributes: [])
         
-        dispatch_async(serialQueue2, {
+        serialQueue2.async(execute: {
             let img2 = Downloader.downloadImageWithURL(self.imageUrls[1])
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.image2.image = img2
                 self.image2.clipsToBounds = true
             })
             
             let img4 = Downloader.downloadImageWithURL(self.imageUrls[3])
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.image4.image = img4
                 self.image4.clipsToBounds = true
             })

@@ -32,55 +32,55 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func clearDownload(sender: UIButton) {
+    @IBAction func clearDownload(_ sender: UIButton) {
         self.image1.image = nil
         self.image2.image = nil
         self.image3.image = nil
         self.image4.image = nil
         
-        NSURLCache.sharedURLCache().removeAllCachedResponses()
+        URLCache.shared.removeAllCachedResponses()
     }
 
-    let queue = NSOperationQueue()
+    let queue = OperationQueue()
     
-    @IBAction func cancelDownload(sender: AnyObject) {
+    @IBAction func cancelDownload(_ sender: AnyObject) {
         self.queue.cancelAllOperations()
     }
     
-    @IBAction func downloadImages(sender: UIButton) {
-        queue.addOperationWithBlock({
+    @IBAction func downloadImages(_ sender: UIButton) {
+        queue.addOperation({
             let img1 = Downloader.downloadImageWithURL(self.imageUrls[0])
             
-            NSOperationQueue.mainQueue().addOperationWithBlock({
+            OperationQueue.main.addOperation({
                 self.image1.image = img1
                 self.image1.clipsToBounds = true
             })
         })
         
-        let op2 = NSBlockOperation(block: {
+        let op2 = BlockOperation(block: {
             let img2 = Downloader.downloadImageWithURL(self.imageUrls[1])
             
-            NSOperationQueue.mainQueue().addOperationWithBlock({
+            OperationQueue.main.addOperation({
                 self.image2.image = img2
                 self.image2.clipsToBounds = true
             })
         })
         op2.completionBlock = { print("image2 downloaded") }
         
-        let op3 = NSBlockOperation(block: {
+        let op3 = BlockOperation(block: {
             let img3 = Downloader.downloadImageWithURL(self.imageUrls[2])
             
-            NSOperationQueue.mainQueue().addOperationWithBlock({
+            OperationQueue.main.addOperation({
                 self.image3.image = img3
                 self.image3.clipsToBounds = true
             })
         })
         op3.completionBlock = { print("image3 downloaded") }
         
-        let op4 = NSBlockOperation(block: {
+        let op4 = BlockOperation(block: {
             let img4 = Downloader.downloadImageWithURL(self.imageUrls[3])
             
-            NSOperationQueue.mainQueue().addOperationWithBlock({
+            OperationQueue.main.addOperation({
                 self.image4.image = img4
                 self.image4.clipsToBounds = true
             })

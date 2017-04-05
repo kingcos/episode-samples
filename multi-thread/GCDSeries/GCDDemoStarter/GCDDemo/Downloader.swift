@@ -9,8 +9,8 @@
 import UIKit
 class Downloader {
     
-    class func downloadImageWithURL(url:String) -> UIImage! {
-        let data = NSData(contentsOfURL: NSURL(string: url)!)
+    class func downloadImageWithURL(_ url:String) -> UIImage! {
+        let data = try? Data(contentsOf: URL(string: url)!)
         return UIImage(data: data!)
     }
 }

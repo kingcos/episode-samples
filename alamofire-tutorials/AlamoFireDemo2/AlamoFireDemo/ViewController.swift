@@ -16,13 +16,13 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         let requestUrl = "https://apidemo.boxue.io/alamofire?XDEBUG_SESSION_START=PHPSTORM"
         
-        Alamofire.request(.GET, requestUrl)
+        Alamofire.request(requestUrl, method: .get)
             .responseJSON(completionHandler: { response in
                 switch response.result {
-                case .Success(let json):
+                case .success(let json):
                     print("JSON: ================")
                     print("\(json)")
-                case .Failure(let error):
+                case .failure(let error):
                     print("\(error)")
                 }
             })

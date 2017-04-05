@@ -21,8 +21,8 @@ class AboutDoraViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func backToMain(sender: UIButton) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func backToMain(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
     }
 
     /*

@@ -14,23 +14,23 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        Alamofire.request(.GET, "https://httpbin.org/get")
-            .response { request, response, data, error in
-                print(request)
-                print(response)
-                print(data)
-                print(data.dynamicType)
-                print(error)
-                print(error.dynamicType)
+        Alamofire.request("https://httpbin.org/get", method: .get)
+            .response { response in
+                print(response.request ?? "nil")
+                print(response.response ?? "nil")
+                print(response.data ?? "nil")
+                print(type(of: response.data))
+                print(response.error ?? "nil")
+                print(type(of: response.error))
             }
             .responseString(completionHandler: { response in
                 print("String ===============")
                 
                 switch response.result {
-                case .Success(let str):
-                    print("\(str.dynamicType)")
+                case .success(let str):
+                    print("\(type(of: str))")
                     print("\(str)")
-                case .Failure(let error):
+                case .failure(let error):
                     print("\(error)")
                 }
             })
@@ -38,26 +38,26 @@ class ViewController: UIViewController {
                 print("JSON ================")
                 
                 switch response.result {
-                case .Success(let json):
-                    let dict = json as! Dictionary<String, AnyObject>
+                case .success(let json):
+                    let dict = json as! Dictionary<String, Any>
                     let origin = dict["origin"] as! String
                     let headers = dict["headers"] as! Dictionary<String, String>
                     
                     print("origin: \(origin)")
-                    let ua = headers["User-Agent"]
+                    let ua = headers["User-Agent"] ?? "nil"
                     print("UA: \(ua)")
-                case .Failure(let error):
+                case .failure(let error):
                     print("\(error)")
                 }
             })
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
 }
 
 

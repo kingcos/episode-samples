@@ -32,16 +32,16 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func clearDownload(sender: UIButton) {
+    @IBAction func clearDownload(_ sender: UIButton) {
         self.image1.image = nil
         self.image2.image = nil
         self.image3.image = nil
         self.image4.image = nil
         
-        NSURLCache.sharedURLCache().removeAllCachedResponses()
+        URLCache.shared.removeAllCachedResponses()
     }
 
-    @IBAction func downloadInMainThread(sender: UIButton) {
+    @IBAction func downloadInMainThread(_ sender: UIButton) {
         self.image1.image = Downloader.downloadImageWithURL(self.imageUrls[0])
         self.image1.clipsToBounds = true
         

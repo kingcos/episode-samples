@@ -11,55 +11,55 @@ import Alamofire
 
 class ViewController: UIViewController {
 
-    lazy var defManager: Manager = {
+    lazy var defManager: SessionManager = {
         // Step 1 Get additional HTTP header
-        var defHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
+        var defHeaders = Alamofire.SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
         
         // Step 2 Set a NSURLSessionConfiguration
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
-        conf.HTTPAdditionalHeaders = defHeaders
+        let conf = URLSessionConfiguration.default
+        conf.httpAdditionalHeaders = defHeaders
         
         // Step 3 Generate a manager
-        return Alamofire.Manager(configuration: conf)
+        return Alamofire.SessionManager(configuration: conf)
     }()
     
-    lazy var backgroundManager: Manager = {
+    lazy var backgroundManager: SessionManager = {
         // Step 1 Get additional HTTP header
-        var defHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
+        var defHeaders = Alamofire.SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
         
         // Step 2 Set a NSURLSessionConfiguration
-        let conf = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("io.boxue.api.background")
-        conf.HTTPAdditionalHeaders = defHeaders
+        let conf = URLSessionConfiguration.background(withIdentifier: "io.boxue.api.background")
+        conf.httpAdditionalHeaders = defHeaders
         
         // Step 3 Generate a manager
-        return Alamofire.Manager(configuration: conf)
+        return Alamofire.SessionManager(configuration: conf)
     }()
     
-    lazy var ephemeralManager: Manager = {
+    lazy var ephemeralManager: SessionManager = {
         // Step 1 Get additional HTTP header
-        var defHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
+        var defHeaders = Alamofire.SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
         
         // Step 2 Set a NSURLSessionConfiguration
-        let conf = NSURLSessionConfiguration.ephemeralSessionConfiguration()
-        conf.HTTPAdditionalHeaders = defHeaders
+        let conf = URLSessionConfiguration.ephemeral
+        conf.httpAdditionalHeaders = defHeaders
         
         // Step 3 Generate a manager
-        return Alamofire.Manager(configuration: conf)
+        return Alamofire.SessionManager(configuration: conf)
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         let requestUrl = "https://apidemo.boxue.io/alamofire"
-       
-        let manager = Alamofire.Manager.sharedInstance
-        defManager.request(.GET, requestUrl)
+        
+        let manager = Alamofire.SessionManager.default
+        defManager.request(requestUrl, method: .get)
             .responseString(completionHandler: { response in
                 switch response.result {
-                case .Success(let str):
+                case .success(let str):
                     print("Response String: =================")
                     print("\(str)")
-                case .Failure(let error):
+                case .failure(let error):
                     print("\(error)")
                 }
             })

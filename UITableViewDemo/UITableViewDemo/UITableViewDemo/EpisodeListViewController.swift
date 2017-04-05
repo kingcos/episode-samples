@@ -9,15 +9,15 @@
 import UIKit
 
 class EpisodeListViewController: UITableViewController {
-    override func tableView(tableView: UITableView,
+    override func tableView(_ tableView: UITableView,
                             numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView,
-                            cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(
-            "EpisodeItem", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView,
+                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "EpisodeItem", for: indexPath)
         
         return cell
     }

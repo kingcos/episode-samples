@@ -20,27 +20,27 @@ class EpisodeListViewController: UITableViewController {
             episodeListItems.append(e)
         }
     }
-    override func tableView(tableView: UITableView,
+    override func tableView(_ tableView: UITableView,
                             numberOfRowsInSection section: Int) -> Int {
         return 10
     }
     
-    override func tableView(tableView: UITableView,
-                            cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(
-            "EpisodeItem", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView,
+                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "EpisodeItem", for: indexPath)
         
         let label = cell.viewWithTag(1024) as! UILabel
         
         let title = self.episodeListItems[indexPath.row].title
         label.text = title
         
-        cell.accessoryType = self.episodeListItems[indexPath.row].finished ? .Checkmark : .None
+        cell.accessoryType = self.episodeListItems[indexPath.row].finished ? .checkmark : .none
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     override func viewDidLoad() {

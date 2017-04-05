@@ -14,14 +14,14 @@ class EpisodeListItem: NSObject, NSCoding {
     
     // Methods in NSCoding
     // How to encode EpisodeListItem attributes
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(title, forKey: "Title")
-        aCoder.encodeBool(finished, forKey: "Finished")
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(title, forKey: "Title")
+        aCoder.encode(finished, forKey: "Finished")
     }
     
     required init?(coder aDecoder: NSCoder) {
-        title = aDecoder.decodeObjectForKey("Title") as! String
-        finished = aDecoder.decodeBoolForKey("Finished")
+        title = aDecoder.decodeObject(forKey: "Title") as! String
+        finished = aDecoder.decodeBool(forKey: "Finished")
         super.init()
     }
     
